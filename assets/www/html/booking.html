@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta name="format-detection" content="telephone=no" charset="UTF-8">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <title>티켓</title>
+    </head>
+    <body>
+
+<div id="frame" class="ticket_flex-item ticket_item1">
+	<ul data-role="listview" data-filter="true" data-filter-placeholder="Search movies.." data-inset="true" id="list">
+		
+	</ul>
+</div>
+
+</html>
+ 	<script>
+   		$(function(){
+   			booking.book();
+   		});
+   		var booking = {
+   				book : function(){
+   					var arr = [];
+   					$.getJSON('http://fkod51.cafe24.com/movie/movie_info',function(data){
+   						var temp = '';
+   						$.each(data.movieList, function(index, value){
+   							temp +='<li><a href=# id="'+this.filmNumber+'">'+this.filmName+'</a></li>';
+   								arr.push(this.filmNumber);
+   						});
+   						$('#list').empty();
+   						$('#list').html(temp);
+   						console.log("두번째 each문 직전")
+   						$.each(data.movieList, function(index, value){
+   							console.log("인덱스"+index);
+   							console.log("두번째 each문 진입")
+   							$('#'+arr[index]).click(function(){
+   								console.log("두번째 each문 들어옴");
+   								booking.result(value.filmNumber);
+   							});
+   						});
+   					});
+   				},
+   				result : function(filmNumber){
+   					$.getJSON('http://fkod51.cafe24.com/movie/movie_name/'+filmNumber,function(data){
+   						var foo = '<div><div><img src="http://fkod51.cafe24.com/resources/images/'+data.filmNumber+'.jpg" style="width: 100%; height: 50%; "></div><div style="margin : auto;"><h1>'+data.filmName+'</h1><h3>을 선택하셨습니다.</h3></div><div><a href="#" id="cancel" class="ui-btn ui-shadow">예매취소</a><a href="#" id="logout" class="ui-btn ui-shadow">로그아웃</a></div></div>';
+   						$('#frame').empty();
+   						$('#frame').html(foo);
+   						$('#cancel').click(function(){
+   							$('#frame').empty();	
+   							location.href='booking.html';
+   						});
+   						$('#logout').click(function(){
+   							location.href='login.html';
+   						});
+   					})
+   				}
+   		}
+   		
+   	</script>
+</body>
